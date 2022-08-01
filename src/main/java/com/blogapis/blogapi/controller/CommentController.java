@@ -2,6 +2,7 @@ package com.blogapis.blogapi.controller;
 
 import com.blogapis.blogapi.payload.BaseResponseDTO;
 import com.blogapis.blogapi.payload.CommentDTO;
+import com.blogapis.blogapi.payload.ServiceResult;
 import com.blogapis.blogapi.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +20,13 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/user/{userId}/post/{postId}/comments")
-    public ResponseEntity<CommentDTO> createComment(
+    public ResponseEntity<ServiceResult> createComment(
             @Valid
             @RequestBody CommentDTO commentDTO,
             @PathVariable Integer userId,
             @PathVariable Integer postId
             ) {
-        return new ResponseEntity<CommentDTO>(
+        return new ResponseEntity<ServiceResult>(
                 commentService.createComment(commentDTO, userId, postId),
                 HttpStatus.CREATED
         );

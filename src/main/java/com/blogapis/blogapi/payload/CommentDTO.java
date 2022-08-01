@@ -1,19 +1,14 @@
 package com.blogapis.blogapi.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDTO extends BaseResponseDTO {
-
-    private int id;
 
     @NotBlank
     private String content;

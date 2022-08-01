@@ -5,6 +5,7 @@ import com.blogapis.blogapi.entity.Posts;
 import com.blogapis.blogapi.entity.User;
 import com.blogapis.blogapi.exception.ResourceNotFoundException;
 import com.blogapis.blogapi.payload.CommentDTO;
+import com.blogapis.blogapi.payload.ServiceResult;
 import com.blogapis.blogapi.repository.CommentRepositiry;
 import com.blogapis.blogapi.repository.PostsRepository;
 import com.blogapis.blogapi.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,25 +34,35 @@ public class CommentServiceImpl implements CommentService {
     private ModelMapper modelMapper;
 
     @Override
-    public CommentDTO createComment(CommentDTO commentDTO, Integer userId, Integer postId) {
+    public ServiceResult createComment(CommentDTO commentDTO, Integer userId, Integer postId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
         Posts posts = postsRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Posts", "postId", postId));
 
-        Comment comment = dtoToComment(commentDTO);
-        comment.setContent(commentDTO.getContent());
-        comment.setPosts(posts);
-        comment.setUser(user);
+//        Comment comment = dtoToComment(commentDTO);
+//        comment.setContent(commentDTO.getContent());
+//        comment.setPosts(posts);
+//        comment.setUser(user);
+
+        Comment comment = Comment.builder()
+                        .content(commentDTO.getContent())
+                        .build();
+
 
         Comment createdComment = commentRepositiry.save(comment);
-        return commentToDto(createdComment);
+        List<CommentDTO> result = new ArrayList<>();
+
+        result.add(commentDTO);
+
+        return new ServiceResult(true, "Comment has been added successfully", result);
+
     }
 
     @Override
     public CommentDTO updateComment(CommentDTO commentDTO, Integer commentId) {
         Comment comment = commentRepositiry.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment", "coomentId", commentId));
+                .orElseThrow(() -> new ResourceNotFoundException("Comment", "commentId", commentId));
 
         comment.setContent(commentDTO.getContent());
 

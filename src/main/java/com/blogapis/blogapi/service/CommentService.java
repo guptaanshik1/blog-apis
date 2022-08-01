@@ -1,12 +1,13 @@
 package com.blogapis.blogapi.service;
 
 import com.blogapis.blogapi.payload.CommentDTO;
+import com.blogapis.blogapi.payload.ServiceResult;
 
 import java.util.List;
 
 public interface CommentService {
 
-    public CommentDTO createComment(CommentDTO commentDTO, Integer userId, Integer postId);
+    public ServiceResult createComment(CommentDTO commentDTO, Integer userId, Integer postId);
 
     public CommentDTO updateComment(CommentDTO commentDTO, Integer commentId);
 
